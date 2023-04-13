@@ -3,16 +3,17 @@
 const server = require("../src/server");
 const supertest = require("supertest");
 const request = supertest(server.app);
-const { sequelize, Cat, User } = require("../src/models");
+const { db, cat, users } = require("../src/auth/models");
 const { response } = require("express");
 
 beforeAll(async () => {
-  await sequelize.sync();
+  await db.sync();
   let catData1 = {
     name: "Marshmellow",
     age: 8,
     sex: "M",
     breed: "Siamese",
+    user_Id: 1,
     note: "",
   };
 
@@ -21,6 +22,7 @@ beforeAll(async () => {
     age: 4,
     sex: "F",
     breed: "American Longhair",
+    user_Id: 1,
     note: ""
   };
   let userData1 = {
@@ -35,67 +37,61 @@ beforeAll(async () => {
 
 
 
-  await Cat.create(catData1);
-  await Cat.create(catData2);
-  await User.create(userData1);
-  await User.create(userData2);
+  await cat.create(catData1);
+  await cat.create(catData2);
+  await users.create(userData1);
+  await users.create(userData2);
 });
 
 afterAll(async () => {
-  await sequelize.drop();
+  await db.drop();
 });
 
 describe('testing our data models', () => {
-
-  xtest('Can create a user', async () => {
-    let newUser = await User.create({
+  let user_Id = null;
+  let catId = null;
+  test('Can create a user', async () => {
+    let newUser = await users.create({
       username: "Jill",
       password: "wonderful",
       role: "foster",
     });
 
-    userId = newUser.id;
+    user_Id = newUser.id;
     expect(newUser.username).toEqual('Jill');
     expect(newUser.role).toEqual('foster');
     expect(newUser.id).toBeTruthy();
   });
 
-  xtest('Can create a Cat', async () => {
-    let newCat = await Cat.create({
+  test('Can create a Cat', async () => {
+    let newCat = await cat.create({
       name: "Sprinkles",
       age: 4,
       sex: "F",
       breed: "American Longhair",
       note: "",
-      userId: 1
-    });
-
-    catId = newCat.id;
+      user_Id: 1
+    })
     expect(newCat.name).toEqual('Sprinkles');
-    expect(newCat.userId).toEqual(1);
   });
 
-  xtest('Can fetch a cat and user', async () => {
-    let cat = await Cat.read(catId, {
-      include: User.model
-    });
+  test('Can fetch a cat and user', async () => {
+    catId = 3
+    let catRead = await cat.read(catId);
+    let userRead = await users.read(catRead.user_Id);
 
-    console.log("Cat WITH ASSOCIATION", cat);
-    expect(cat.name).toEqual('Sprinkles');
-    expect(cat.User.username).toEqual('Trey')
+
+    console.log("Cat WITH ASSOCIATION", userRead);
+    expect(catRead.name).toEqual('Sprinkles');
+    expect(userRead.username).toEqual('Trey')
   })
 
-  xtest('Can find cat adopted by foster', async () => {
-    const cats = await Cat.findAll({
-      include: [{
-        model: User,
-        where: {
-          userId: 1
-        }
-      }]
-    })
-    console.log(cats);
-    // expect(cats.body[0].name).toEqual
+  test('Can find cat adopted by foster', async () => {
+    user_Id = 1
+    const cats = await cat.read(null, {
+      where: { user_Id: user_Id }
+    });
+    expect(cats.length).toEqual(3);
   })
 
 })

@@ -10,28 +10,53 @@ class DataCollection {
     this.model = model;
   }
 
-  get(id) {
-    if (id) {
-      return this.model.findOne({ where: { id } });
+  async read(id, options) {
+    try {
+      if (id) {
+        console.log('chicke',options);
+        return await this.model.findOne({ where: {id:id}, ...options});
+      } else {
+        return await this.model.findAll(options);
+      }
+    } catch (e) {
+      console.log('COLLECTION CLASS READ ERROR', e);
     }
-    else {
-      return this.model.findAll({});
+  }
+
+  async create(data) {
+    try {
+      return await this.model.create(data);
+    } catch(e) {
+      console.log('COLLECTION CREATE ERROR', e);
     }
   }
 
-  create(record) {
-    return this.model.create(record);
+  async update(id, data) {
+    try {
+      let updatedRecord = await this.model.update(
+        data,
+        {
+          where: { id: id }
+        });
+      return updatedRecord;
+    } catch (e) {
+      console.log('COLLECTION UPDATE ERROR', e);
+    }
   }
 
-  update(id, data) {
-    return this.model.findOne({ where: { id } })
-      .then(record => record.update(data));
+  async delete(id) {
+    try {
+      let number = await this.model.destroy({
+        where: {
+          id: id,
+        }
+      });
+      return number;
+    } catch(e) {
+      console.log('COLLECTION DELETE ERROR: ', e);
+    }
   }
-
-  delete(id) {
-    return this.model.destroy({ where: { id }});
-  }
-
 }
+
 
 module.exports = DataCollection;

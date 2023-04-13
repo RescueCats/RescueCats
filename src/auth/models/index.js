@@ -11,6 +11,9 @@ const sequelize = new Sequelize(DATABASE_URL);
 const cat = catModel(sequelize, DataTypes);
 const users = userModel(sequelize, DataTypes);
 
+users.hasMany(cat, {foreignKey: 'userId', sourceKey: 'id'});
+cat.belongsTo(users, { foreignKey: 'userId', targetKey: 'id'});
+
 module.exports = {
   db: sequelize,
   cat: new Collection(cat),

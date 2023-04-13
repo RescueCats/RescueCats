@@ -24,6 +24,11 @@ const Cat = (sequelize) => sequelize.define('Cat', {
     allowNull: false,
     required: true
   },
+  user_Id: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    required: false,
+  },
   note: {
     type: DataTypes.STRING,
     allowNull: false,

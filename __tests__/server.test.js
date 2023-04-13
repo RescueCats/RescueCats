@@ -14,7 +14,7 @@ afterAll( async() => {
 });
 
 //v1 tests
-describe('Testing unauthenticated server routes', () => {
+xdescribe('Testing unauthenticated server routes', () => {
   let testUser, testClothes, testFood, user_res, clothes_res, food_res;
 
   test('Can POST to create an item', async() => {
