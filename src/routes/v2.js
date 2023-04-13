@@ -23,13 +23,13 @@ router.put('/:model/:id', permissions('update'), handleUpdate);
 router.delete('/:model/:id', permissions('delete'), handleDelete);
 
 async function handleGetAll(req, res) {
-  let allRecords = await req.model.get();
+  let allRecords = await req.model.read();
   res.status(200).json(allRecords);
 }
 
 async function handleGetOne(req, res) {
   const id = req.params.id;
-  let theRecord = await req.model.get(id);
+  let theRecord = await req.model.read(id);
   res.status(200).json(theRecord);
 }
 

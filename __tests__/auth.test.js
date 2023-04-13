@@ -13,7 +13,7 @@ afterAll( async() => {
   await users.model.drop();
 });
 
-xdescribe('Testing auth', () => {
+describe('Testing auth', () => {
   let testUser = {};
   let token = '';
 

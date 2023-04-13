@@ -13,7 +13,6 @@ class DataCollection {
   async read(id, options) {
     try {
       if (id) {
-        console.log('chicke',options);
         return await this.model.findOne({ where: {id:id}, ...options});
       } else {
         return await this.model.findAll(options);
