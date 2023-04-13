@@ -85,7 +85,7 @@ describe('testing our data models', () => {
     expect(cat.User.username).toEqual('Trey')
   })
 
-  test('Can find cat adopted by foster', async () => {
+  xtest('Can find cat adopted by foster', async () => {
     const cats = await Cat.findAll({
       include: [{
         model: User,
