@@ -1,6 +1,6 @@
-const { db, cat } = require('./src/auth/models/');
+const { db, cat, users } = require('./src/auth/models/');
 
-db.sync().then(() => {
+db.drop().then(() => db.sync()).then(() => {
   let catData1 = {
     name: "Marshmellow",
     age: 8,
@@ -38,9 +38,18 @@ db.sync().then(() => {
     sex: 'male',
     breed: 'Dragon'
   }
+
+  let userData1 = {
+    username: 'Test',
+    password: 'password',
+    role: 'foster'
+  };
+
   cat.create(catData1);
   cat.create(catData2);
   cat.create(catData3);
   cat.create(catData4);
   cat.create(catData5);
+
+  users.create(userData1);
 });

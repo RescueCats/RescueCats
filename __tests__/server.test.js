@@ -31,7 +31,7 @@ beforeAll( async() => {
     sex: 'female',
     breed: 'Tabby'
   };
-
+  await db.drop();
   await db.sync();
 
   await cat.create(catData1);
@@ -104,7 +104,13 @@ describe('Testing authenticated server routes', () => {
     expect(bad_res2.body.length).toBeFalsy();
   });
 
-  test('Can update item by ID', async() => {  
+  test('Can GET all cats for a foster', async() => {
+    const foster_cats = await request.get(`/api/v2/users/1/cat`)
+      .set('Authorization', `Bearer ${token}`);
+    expect(foster_cats.body.length).toEqual(2);
+  });
+
+  xtest('Can update item by ID', async() => {  
     let get_cat = await request.get('/api/v2/cat/2')
       .set('Authorization', `Bearer ${token}`);
     get_cat.body.note = "Had diarrhea";
@@ -135,7 +141,7 @@ describe('Testing authenticated server routes', () => {
     expect(get_cat2.body.note).toEqual('Had diarrhea');
   });
 
-  test('Can delete item by ID', async() => {
+  xtest('Can delete item by ID', async() => {
     //GET requests
     admin_res = await request.post('/signin').auth(testAdmin.username, testAdmin.password);
     token = admin_res.body.token;

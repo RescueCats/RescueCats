@@ -21,6 +21,7 @@ router.get('/:model/:id', permissions('read'), handleGetOne);
 router.post('/:model', permissions('create'), handleCreate);
 router.put('/:model/:id', permissions('update'), handleUpdate);
 router.delete('/:model/:id', permissions('delete'), handleDelete);
+router.get('/users/:id/:model', permissions('update'), handleFosterCats);
 
 async function handleGetAll(req, res) {
   let allRecords = await req.model.read();
@@ -50,6 +51,16 @@ async function handleDelete(req, res) {
   let id = req.params.id;
   let deletedRecord = await req.model.delete(id);
   res.status(200).json(deletedRecord);
+}
+
+async function handleFosterCats(req, res) {
+  let userId = req.params.id;
+  let foster_cats = await req.model.read(null, {
+    where: {
+      user_Id: userId
+    }
+  });
+  res.status(200).json(foster_cats);
 }
 
 
