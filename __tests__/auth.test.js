@@ -6,6 +6,7 @@ const supertest = require('supertest');
 const request = supertest(server.app);
 
 beforeAll( async() => {
+  await users.model.drop();
   await users.model.sync();
 });
 

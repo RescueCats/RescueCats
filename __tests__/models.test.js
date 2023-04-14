@@ -7,6 +7,7 @@ const { db, cat, users } = require("../src/auth/models");
 const { response } = require("express");
 
 beforeAll(async () => {
+  await db.drop();
   await db.sync();
   let catData1 = {
     name: "Marshmellow",
