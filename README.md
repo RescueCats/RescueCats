@@ -18,6 +18,8 @@ To test:
 
 ![image](./UML.png)
 
+![image](./UML_for_Lab_9_%20RescueCats.png)
+
 ![image](./Whiteboard.png)
 
 ![image](./file_structure.png)

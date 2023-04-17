@@ -4,7 +4,6 @@ const server = require("../src/server");
 const supertest = require("supertest");
 const request = supertest(server.app);
 const { db, cat, users } = require("../src/auth/models");
-const { response } = require("express");
 
 beforeAll(async () => {
   await db.drop();
@@ -92,6 +91,7 @@ describe('testing our data models', () => {
     const cats = await cat.read(null, {
       where: { user_Id: user_Id }
     });
+    console.log('$$$$', cats);
     expect(cats.length).toEqual(3);
   })
 
